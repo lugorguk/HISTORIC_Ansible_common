@@ -1,0 +1,9 @@
+---
+- name: Install standard software
+  import_tasks: 10_Software.yml
+- name: Set Banners
+  import_tasks: 20_Set_Banners.yml
+- name: Configure the SSHD
+  import_tasks: 30_Configure_SSHD.yml
+- name: Set the Timezone
+  import_tasks: 40_Set_Timezone.yml

@@ -1,0 +1,4 @@
+#! /bin/sh
+logger "Setting MOTD with $0"
+echo "    If you have any issues with this host, please contact mailto:admin@lug.org.uk.    "
+echo ''

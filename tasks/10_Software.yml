@@ -1,0 +1,12 @@
+---
+- name: Install software
+  apt:
+    name:
+    - ssh
+    - fail2ban
+    - sudo
+    - ufw
+    - monit
+    - exim4
+    - etckeeper
+    state: present

@@ -1,0 +1,5 @@
+#! /bin/sh
+logger "Setting MOTD with $0"
+[ ! -f /etc/motd.tail ] && exit 0
+cat /etc/motd.tail
+echo ''

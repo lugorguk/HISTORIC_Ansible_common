@@ -1,0 +1,12 @@
+#! /bin/sh
+logger "Setting MOTD with $0"
+echo '====================================== WARNING ======================================='
+echo '            This computer system is the property of Linux User Groups UK.             '
+echo '                                                                                      '
+echo '     Disconnect NOW if you have not been expressly authorised to use this system.     '
+echo '      Unauthorised use is a criminal offence under the Computer Misuse Act 1990.      '
+echo '                                                                                      '
+echo "    Communications on or through lug.org.uk's computer systems may be monitored or    "
+echo "     recorded to secure effective system operation and for other lawful purposes.     "
+echo '====================================== WARNING ======================================='
+echo ''

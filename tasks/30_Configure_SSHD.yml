@@ -1,4 +1,12 @@
 ---
+- name: Install software
+  apt:
+    name:
+    - ssh
+    - fail2ban
+    - sudo
+    state: present
+
 - name: Configure ssh to use the login banner
   lineinfile:
     state: present
@@ -11,6 +19,14 @@
   lineinfile:
     state: present
     dest: /etc/ssh/sshd_config
-    insertafter: '^(#)?Port 22$'
+    regexp: '^(#)?Port 22$'
+    line: "Port 22"
+  notify: restart ssh
+
+- name: Configure ssh to supply both TCP/2222 and TCP/22
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    insertafter: '^Port 22$'
     line: "Port {{ sshd_port }}"
   notify: restart ssh

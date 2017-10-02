@@ -10,7 +10,6 @@
 # The following stanzas are based on:
 # https://wiki.debian.org/motd
 # https://oitibs.com/debian-jessie-dynamic-motd/
-
 - name: Set up the MOTD updater path
   file:
     name: /etc/update-motd.d
@@ -44,9 +43,11 @@
     group: root
     mode: 0644
 
+# This line thanks to:
+# https://elhombrequereventodeinformacion.wordpress.com/2015/04/30/motd-handling-in-debian-jessie-fixed/
 - name: Update /etc/pam.d/sshd to run the update-motd.d
   lineinfile:
     state: present
-    dest: /etc/ssh/sshd_config
+    dest: /etc/pam.d/sshd
     insertbefore: '^\s*session    optional     pam_motd.so  motd=/run/motd.dynamic\s*$'
     line: "session    optional     pam_exec.so  type=open_session stdout /bin/run-parts /etc/update-motd.d"

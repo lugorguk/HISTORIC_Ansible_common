@@ -1,0 +1,3 @@
+set mailserver 127.0.0.1 using hostname {{ ansible_fqdn }}
+set alert {{ admin_mail_account | default ('root@' ~ ansible_fqdn) }}
+set mail-format { from: root@{{ ansible_fqdn }} }

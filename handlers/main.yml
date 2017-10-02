@@ -4,3 +4,11 @@
     name: ssh
     state: restarted
 
+- name: etckeeper commit
+  command: "etckeeper commit -m 'Ansible automated commit at {{ ansible_date_time.iso8601 }}'"
+
+- name: Restart Monit
+  service:
+    name: monit
+    state: restarted
+

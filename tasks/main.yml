@@ -7,3 +7,9 @@
   import_tasks: 30_Configure_SSHD.yml
 - name: Set the Timezone
   import_tasks: 40_Set_Timezone.yml
+- name: Create the LugAdmins
+  import_tasks: 50_Create_Users.yml
+- name: Initialize etckeeper
+  import_tasks: 60_Setup_etckeeper.yml
+- name: Configure Monit
+  import_tasks: 70_Setup_Monit.yml

@@ -5,11 +5,3 @@
     autoremove: yes
     update_cache: yes
     autoclean: yes
-
-- name: Install software
-  apt:
-    name:
-    - ufw
-    - monit
-    - exim4
-    state: present

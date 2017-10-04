@@ -12,3 +12,13 @@
     name: monit
     state: restarted
 
+- name: restart exim
+  service:
+    name: exim4
+    state: restarted
+
+- name: Reload UFW
+  ufw:
+    state: enabled
+    logging: on
+    log: yes

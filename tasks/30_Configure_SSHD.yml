@@ -1,6 +1,27 @@
 ---
 - name: Install software
   apt:
+    name: ufw
+    state: present
+
+- name: Allow all outbound access
+  ufw:
+    direction: out
+    dest: 0.0.0.0/0
+    rule: allow
+    comment: Allow all outbound access
+  notify: Reload UFW
+
+- name: Prevent all inbound access
+  ufw:
+    direction: in
+    dest: 0.0.0.0/0
+    rule: deny
+    comment: Prevent all inbound access
+  notify: Reload UFW
+
+- name: Install software
+  apt:
     name:
     - ssh
     - fail2ban
@@ -15,7 +36,7 @@
     line: 'Banner /etc/issue.net'
   notify: restart ssh
 
-- name: Configure ssh to supply both TCP/2222 and TCP/22
+- name: Configure ssh to supply TCP/22
   lineinfile:
     state: present
     dest: /etc/ssh/sshd_config
@@ -23,10 +44,36 @@
     line: "Port 22"
   notify: restart ssh
 
-- name: Configure ssh to supply both TCP/2222 and TCP/22
+- name: Configure ssh to supply a different standard SSH port
   lineinfile:
     state: present
     dest: /etc/ssh/sshd_config
     insertafter: '^Port 22$'
     line: "Port {{ sshd_port }}"
   notify: restart ssh
+  when: sshd_port is defined and sshd_port != 22
+
+- name: Lab SSH
+  ufw:
+    insert: 1
+    direction: in
+    comment: Enable Lab SSH
+    rule: allow
+    port: 22
+    protocol: tcp
+    src: "{{ item }}"
+  with_items:
+  - 10.0.0.0/8        # VirtualBox
+  - 192.0.2.0/24      # Test Network
+  when: lab is defined and lab == 'true'
+  notify: Reload UFW
+
+- name: SSH
+  ufw:
+    insert: 1
+    direction: in
+    comment: Allow SSH access in
+    rule: allow
+    port: "{{ sshd_port }}"
+    protocol: tcp
+  notify: Reload UFW

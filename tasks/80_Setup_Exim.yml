@@ -1,0 +1,19 @@
+---
+# Based on https://github.com/geerlingguy/ansible-role-exim
+- name: Install exim
+  apt:
+    name:
+    - exim4
+    state: present
+
+- name: Configure exim
+  lineinfile:
+    dest: /etc/exim4/update-exim4.conf.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+  - { regexp: '^dc_eximconfig_configtype', line: "dc_eximconfig_configtype='internet'" }
+  - { regexp: '^dc_localdelivery', line: "dc_localdelivery='mail_spool'" }
+  - { regexp: '^#?\s?primary_hostname', line: "primary_hostname={{ ansible_fqdn }}" }
+  notify: restart exim

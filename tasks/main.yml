@@ -13,3 +13,5 @@
   import_tasks: 60_Setup_etckeeper.yml
 - name: Configure Monit
   import_tasks: 70_Setup_Monit.yml
+- name: Configure exim
+  import_tasks: 80_Setup_Exim.yml

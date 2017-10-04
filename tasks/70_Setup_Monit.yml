@@ -50,9 +50,10 @@
 
 - name: Configure Firewall
   ufw:
+    insert: 1
+    direction: in
+    comment: "Monit HTTPS"
+    rule: allow
     port: "{{ monit_https_port | default(2812) }}"
     proto: tcp
-    rule: in
-    insert: 1
-    comment: "Monit HTTPS"
   notify: Reload UFW

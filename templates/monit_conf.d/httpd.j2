@@ -1,0 +1,1 @@
+SET HTTPD PORT {{ monit_https_port | default(2812) }} SSL ENABLE PEMFILE {{ certbot_pem | default('/etc/ssl/private/final-ssl-cert-snakeoil.pem') }} ALLOWSELFCERTIFICATION ALLOW @lugadmins

@@ -1,12 +1,7 @@
 ---
-- name: Install software
+- name: Dist-Upgrade
   apt:
-    name:
-    - ssh
-    - fail2ban
-    - sudo
-    - ufw
-    - monit
-    - exim4
-    - etckeeper
-    state: present
+    upgrade: dist
+    autoremove: yes
+    update_cache: yes
+    autoclean: yes

@@ -1,0 +1,7 @@
+check system {{ ansible_fqdn }}
+    if loadavg (1min) > {{ monit_high_load_1min | default(4) }}  then alert
+    if loadavg (5min) > {{ monit_high_load_5min | default(2) }} then alert
+    if memory usage > {{ monit_high_memory_use | default(80) }}% then exec /bin/sh -c "ps xauww | mail -s 'High memory usage on {{ansible_fqdn}}.' {{ admin_mail_account | default ('root@' ~ ansible_fqdn) }}"
+    if cpu usage (user) > {{ monit_high_cpu_user | default(70) }}% then alert
+    if cpu usage (system) > {{ monit_high_cpu_system | default(30) }}% then alert
+    if cpu usage (wait) > {{ monit_high_cpu_wait | default(20) }}% then alert

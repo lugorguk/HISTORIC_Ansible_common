@@ -1,0 +1,35 @@
+---
+- name: Install software
+  apt:
+    name:
+    - git
+    - etckeeper
+    state: present
+
+- name: Set up Root's .gitconfig
+  lineinfile:
+    path: /root/.gitconfig
+    owner: root
+    group: root
+    insertafter: "{{ item.after }}"
+    line: "{{ item.line }}"
+    create: yes
+    state: present
+    mode: 0600
+  with_items:
+    - line: '[user]'
+      after: EOF
+    - line: "name = root on {{ ansible_fqdn }}"
+      after: '[user]'
+    - line: "email = root@{{ ansible_fqdn }}"
+      after: '[user]'
+
+- name: Check the etckeeper Git Repo exists
+  stat:
+    path: /etc/.git
+  register: etckeeper_dotgit
+
+- name: Run etckeeper init
+  when: etckeeper_dotgit.stat.exists == False
+  command: etckeeper init
+  notify: etckeeper_commit

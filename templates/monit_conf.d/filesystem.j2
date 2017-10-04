@@ -1,0 +1,8 @@
+{% for partition in ansible_mounts | sort %}
+{% if disks is defined and disks[partition.device] is defined and disks[partition.device].skip is defined and disks[partition.device].skip == true %}
+{% else %}
+check device {{ 'Disk-'~partition.device }} with path {{ partition.device }}
+    if SPACE usage > {% if disks is defined and disks[partition.device] is defined and disks[partition.device].maxalarm is defined %}{{ disks[partition.device].maxalarm }}{% else %}{{ monit_disk_maxalarm | default(90) }}{% endif %}% for 5 times within 15 cycles then alert
+    if changed fsflags then alert
+{% endif %}
+{% endfor %}

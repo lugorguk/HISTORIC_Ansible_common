@@ -1,0 +1,44 @@
+---
+- name: Set up sudoers
+  copy:
+    src: ../files/sudoers.d/lugadmins
+    dest: /etc/sudoers.d/lugadmins
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Creating lugadmins group
+  group:
+    name: lugadmins
+    system: yes
+
+- name: Creating Admins
+  user:
+    name: "{{ item.key }}"
+    uid: "{{ item.value.uid | default(omit) }}"
+    comment: "{{ item.value.name | default(omit) }}"
+    createhome: yes
+    groups: lugadmins
+    shell: /bin/bash
+    password: "{{ first_deploy_password| default('Password') | password_hash('sha512') }}"
+    update_password: on_create
+  with_dict: "{{ admins }}"
+
+- name: Create ssh key directory
+  file:
+    name: "/home/{{ item.key }}/.ssh"
+    state: directory
+    owner: "{{ item.key }}"
+    group: nogroup
+    mode: 0700
+  with_dict: "{{ admins }}"
+
+- name: Create ssh key directory
+  copy:
+    dest: "/home/{{ item.key }}/.ssh/authorized_keys"
+    content: "{{ item.value.ssh_keys }}"
+    owner: "{{ item.key }}"
+    group: nogroup
+    mode: 0600
+  with_dict: "{{ admins }}"
+  when: item.value.ssh_keys is defined

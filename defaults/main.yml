@@ -1,2 +1,5 @@
 ---
 sshd_port: 22
+monit_disk_maxalarm: 90
+admin_mail_account: "root@{{ansible_fqdn}}"
+disks:

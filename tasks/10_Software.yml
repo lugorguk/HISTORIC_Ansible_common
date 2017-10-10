@@ -5,3 +5,22 @@
     autoremove: yes
     update_cache: yes
     autoclean: yes
+
+- name: Install apt related things
+  apt:
+    name:
+    - apt-listchanges
+    - debsums
+    state: present
+
+- name: Configure /etc/apt/listchanges.conf
+  lineinfile:
+    state: present
+    dest: /etc/apt/listchanges.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+  - regexp: '^email_address=.*$'
+    line: "email_address={{ admin_mail_account | default ('root@' ~ ansible_fqdn) }}"
+  - regexp: '^which=.*$'
+    line: "which=both"

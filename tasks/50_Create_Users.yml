@@ -22,7 +22,8 @@
     shell: /bin/bash
     password: "{{ first_deploy_password| default('Password') | password_hash('sha512') }}"
     update_password: on_create
-  with_dict: "{{ admins }}"
+  with_dict: "{{ admin_team }}"
+  when: admin_team is defined
 
 - name: Create ssh key directory
   file:
@@ -31,14 +32,17 @@
     owner: "{{ item.key }}"
     group: nogroup
     mode: 0700
-  with_dict: "{{ admins }}"
+  with_dict: "{{ admin_team }}"
+  when: admin_team is defined
 
-- name: Create ssh key directory
+- name: Create Authorized Keys file
   copy:
     dest: "/home/{{ item.key }}/.ssh/authorized_keys"
     content: "{{ item.value.ssh_keys }}"
     owner: "{{ item.key }}"
     group: nogroup
     mode: 0600
-  with_dict: "{{ admins }}"
-  when: item.value.ssh_keys is defined
+  with_dict: "{{ admin_team }}"
+  when:
+  - admin_team is defined
+  - item.value.ssh_keys is defined
